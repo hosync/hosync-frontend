@@ -42,7 +42,9 @@ const files = {
 
     return false
   },
-  getFileNameAndExtension: (file: any): { fileName: string; extension: string } => {
+  getFileNameAndExtension: (
+    file: any
+  ): { fileName: string; extension: string } => {
     if (!file) {
       return {
         fileName: '',
@@ -72,7 +74,9 @@ const files = {
     if (e.target.files[0]) {
       const fileData = e.target.files[0]
       const fileSize = files.bytesToSize(fileData.size, 52000000)
-      const { fileName, extension } = files.getFileNameAndExtension(fileData.name)
+      const { fileName, extension } = files.getFileNameAndExtension(
+        fileData.name
+      )
       const identifier = slug(fileName)
       const code = security.string.code(4)
       const isImage = ['png', 'jpg', 'jpeg'].includes(extension)
@@ -111,7 +115,10 @@ const files = {
       if (currentFileStatus) {
         fileName = files.getFileNameFromUrl(currentFileStatus.url)
 
-        if (currentFileStatus.action === 'delete' || currentFileStatus.action == 'pending') {
+        if (
+          currentFileStatus.action === 'delete' ||
+          currentFileStatus.action == 'pending'
+        ) {
           // Delete photo from server
           await deleteCallback(fileName)
         }
@@ -149,13 +156,13 @@ const files = {
     const response = await api.fetch(fileUploadEndPoint, {
       method: 'POST',
       body: formData,
-      bodyType: 'form-data',
-      addLocalHost: true
+      bodyType: 'form-data'
     })
     return response
   },
   generateUniqueFileName: (originalFileName: string) => {
-    const { fileName, extension } = files.getFileNameAndExtension(originalFileName)
+    const { fileName, extension } =
+      files.getFileNameAndExtension(originalFileName)
     const identifier = slug(fileName)
     const code = security.string.code(4)
 
@@ -193,7 +200,9 @@ const files = {
   },
   formatFileList: async (fileList: FileList) => {
     const fileListArray = Array.from(fileList)
-    const formattedFileList = fileListArray.map((file) => files.formatFileData(file))
+    const formattedFileList = fileListArray.map((file) =>
+      files.formatFileData(file)
+    )
     return Promise.all(formattedFileList)
   },
   getFileInfo: (file: string) => {
