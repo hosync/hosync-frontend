@@ -16,7 +16,7 @@ export interface Configuration {
   hostname?: string
   mode?: string
   api: {
-    uri: string
+    url: string
   }
   files: {
     extensions: {
@@ -37,7 +37,7 @@ export const globalConfig: Configuration = {
     defaultTheme: 'dark'
   },
   api: {
-    uri: ''
+    url: process.env.API_URL || 'http://localhost:4000'
   },
   files: {
     extensions: {
@@ -55,12 +55,6 @@ export const globalConfig: Configuration = {
 const buildConfig = (): Configuration => {
   const config: Configuration = {
     ...globalConfig,
-    api: {
-      uri:
-        isProduction && !isLocalProduction
-          ? `https://${globalConfig.domainName}/graphql`
-          : 'http://localhost:4000/graphql'
-    },
     homeUrl: `https://${globalConfig.domainName}`,
     hostname:
       isProduction && !isLocalProduction

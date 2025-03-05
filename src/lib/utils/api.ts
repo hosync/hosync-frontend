@@ -1,3 +1,5 @@
+import config from '@/lib/config'
+
 type RequestHeaders = { [key: string]: string }
 
 type RequestBody = { [key: string]: any }
@@ -5,12 +7,17 @@ type RequestBody = { [key: string]: any }
 type Options = {
   credentials?: 'include' | 'omit' | 'same-origin'
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
-  cache?: 'default' | 'no-store' | 'reload' | 'no-cache' | 'force-cache' | 'only-if-cached'
+  cache?:
+    | 'default'
+    | 'no-store'
+    | 'reload'
+    | 'no-cache'
+    | 'force-cache'
+    | 'only-if-cached'
   headers?: RequestHeaders
   body?: RequestBody
   bodyType?: 'json' | 'form-data'
   fields?: string[]
-  addLocalHost?: boolean
   next?: {
     tags?: string[]
   }
@@ -30,13 +37,10 @@ type FetchRequestConfig = {
 
 type FetchRequest = FetchRequestConfig | ((response: any) => FetchRequestConfig)
 
-const localhost = 'http://localhost:4000'
+const apiUrl = config.api.url
 
 const api = {
-  async fetchChain(
-    requests: FetchRequest[],
-    addLocalHost?: boolean
-  ): Promise<{ [url: string]: any }> {
+  async fetchChain(requests: FetchRequest[]): Promise<{ [url: string]: any }> {
     let lastResponse: any = null
     const responses: { [url: string]: any } = {}
     const errors = []
@@ -46,8 +50,8 @@ const api = {
         request = request(lastResponse)
       }
 
-      if (addLocalHost) {
-        request.url = `${localhost}${request.url}`
+      if (request.url.startsWith('/')) {
+        request.url = `${apiUrl}${request.url}`
       }
 
       try {
@@ -59,12 +63,15 @@ const api = {
         })
 
         if (!response.ok) {
-          errors.push(request.error || new Error(`Failed to fetch data from ${request.url}`))
+          errors.push(
+            request.error ||
+              new Error(`Failed to fetch data from ${request.url}`)
+          )
           break
         }
 
         lastResponse = await response.json()
-        responses[request.url.replace(localhost, '')] = lastResponse
+        responses[request.url.replace(apiUrl, '')] = lastResponse
       } catch (error) {
         errors.push(request.error || error)
 
@@ -103,8 +110,8 @@ const api = {
       }
     }
 
-    if (options?.addLocalHost) {
-      url = `${localhost}${url}`
+    if (url.startsWith('/')) {
+      url = `${apiUrl}${url}`
     }
 
     if (fields.length) {

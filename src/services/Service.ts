@@ -31,7 +31,7 @@ class Service {
 
   async getAll({ endpoint = '' }): Promise<any> {
     const response = await api.fetch<APIResponse<any>>(
-      `${process.env.API_URL}/api/v1/${endpoint || this.endpoint}`,
+      `/api/v1/${endpoint || this.endpoint}`,
       {
         method: 'GET'
       }
@@ -59,7 +59,7 @@ class Service {
     }
 
     const response = await api.fetch<APIResponse<any>>(
-      `${process.env.API_URL}/api/v1/${endpoint || this.endpoint}${endpointPath}`,
+      `/api/v1/${endpoint || this.endpoint}${endpointPath}`,
       fetchOptions
     )
 
@@ -90,7 +90,7 @@ class Service {
     }
 
     const response = await api.fetch<APIResponse<any>>(
-      `${process.env.API_URL}/api/v1/${endpoint || this.endpoint}${endpointPath}`,
+      `/api/v1/${endpoint || this.endpoint}${endpointPath}`,
       fetchOptions
     )
 
@@ -107,7 +107,7 @@ class Service {
 
   async create(itemData: any): Promise<any> {
     const createdItem = await api.fetch<APIResponse<any>>(
-      `${process.env.API_URL}/api/v1/${this.endpoint}/create`,
+      `/api/v1/${this.endpoint}/create`,
       {
         method: 'POST',
         body: itemData
@@ -133,7 +133,7 @@ class Service {
 
   async update(id: string, itemData: any): Promise<any> {
     const editedItem = await api.fetch<APIResponse<any>>(
-      `${process.env.API_URL}/api/v1/${this.endpoint}/${id}`,
+      `/api/v1/${this.endpoint}/${id}`,
       {
         method: 'PUT',
         body: itemData
@@ -160,7 +160,7 @@ class Service {
 
   async delete(id: string): Promise<any> {
     const response = await api.fetch<APIResponse<any>>(
-      `${process.env.API_URL}/api/v1/${this.endpoint}/${id}`,
+      `/api/v1/${this.endpoint}/${id}`,
       {
         method: 'DELETE'
       }

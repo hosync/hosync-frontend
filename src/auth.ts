@@ -63,13 +63,10 @@ const authOptions: NextAuthConfig = {
 
           console.log('BODY XXXX===>', body)
 
-          const response = await api.fetch<any>(
-            `${process.env.API_URL}/api/v1/user/login`,
-            {
-              method: 'POST',
-              body
-            }
-          )
+          const response = await api.fetch<any>('/api/v1/user/login', {
+            method: 'POST',
+            body
+          })
 
           console.log('RESPONSE credentials===>', response)
 
@@ -105,16 +102,13 @@ const authOptions: NextAuthConfig = {
     async signIn(allData: any) {
       console.log('ALL DATA ===>', allData)
 
-      const response = await api.fetch<any>(
-        `${process.env.API_URL}/api/v1/account/link`,
-        {
-          method: 'POST',
-          body: {
-            ...allData,
-            scope
-          }
+      const response = await api.fetch<any>('/api/v1/account/link', {
+        method: 'POST',
+        body: {
+          ...allData,
+          scope
         }
-      )
+      })
 
       if (!response.ok) {
         return `/auth/register?error=account&email=${allData.user.email}`
@@ -135,12 +129,9 @@ const authOptions: NextAuthConfig = {
 
       const email = account?.email ?? user?.email
 
-      const response = await api.fetch<any>(
-        `${process.env.API_URL}/api/v1/user/by/email/${email}`,
-        {
-          method: 'GET'
-        }
-      )
+      const response = await api.fetch<any>(`/api/v1/user/by/email/${email}`, {
+        method: 'GET'
+      })
 
       if (response.ok) {
         const localUser = response.items[0]
@@ -154,7 +145,7 @@ const authOptions: NextAuthConfig = {
         token.code = localUser.code
 
         const businessResponse = await api.fetch<any>(
-          `${process.env.API_URL}/api/v1/business/by/userId/${localUser.id}`,
+          `/api/v1/business/by/userId/${localUser.id}`,
           {
             method: 'GET'
           }

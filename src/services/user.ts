@@ -18,13 +18,10 @@ class Service extends ServiceHandler {
     email: string
     password: string
   }): Promise<APIResponse<Token>> {
-    const response = await api.fetch<APIResponse<Token>>(
-      `${process.env.API_URL}/api/v1/user/login`,
-      {
-        method: 'POST',
-        body: { emailOrUsername: email.toLowerCase(), password }
-      }
-    )
+    const response = await api.fetch<APIResponse<Token>>(`/api/v1/user/login`, {
+      method: 'POST',
+      body: { emailOrUsername: email.toLowerCase(), password }
+    })
 
     if (response.ok) {
       const [{ token = '' }] = response.items || []
@@ -59,7 +56,7 @@ class Service extends ServiceHandler {
 
     const requests = [
       {
-        url: `${process.env.API_URL}/api/v1/user/create`,
+        url: '/api/v1/user/create',
         method: 'POST',
         body: {
           tier: 'free',
@@ -80,7 +77,7 @@ class Service extends ServiceHandler {
         }
       },
       ({ items }: any) => ({
-        url: `${process.env.API_URL}/api/v1/account/create`,
+        url: '/api/v1/account/create',
         method: 'POST',
         body: {
           userId: items[0].id,
@@ -92,7 +89,7 @@ class Service extends ServiceHandler {
         }
       }),
       ({ items }: any) => ({
-        url: `${process.env.API_URL}/api/v1/business/create`,
+        url: '/api/v1/business/create',
         method: 'POST',
         body: {
           userId: items[0].userId,
@@ -146,7 +143,7 @@ class Service extends ServiceHandler {
     password: string
   }): Promise<APIResponse<CreatedItem>> {
     const response = await api.fetch<APIResponse<CreatedItem>>(
-      `${process.env.API_URL}/api/v1/user/create`,
+      '/api/v1/user/create',
       {
         method: 'POST',
         body: {

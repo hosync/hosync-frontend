@@ -22,7 +22,7 @@ class Service extends ServiceHandler {
     }
 
     const response = await api.fetch<APIResponse<any>>(
-      `${process.env.API_URL}/api/v1/${endpoint || this.endpoint}`,
+      `/api/v1/${endpoint || this.endpoint}`,
       {
         method: 'GET',
         headers
